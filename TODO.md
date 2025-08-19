@@ -163,6 +163,9 @@ Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 2**'yi hayata geçirmek i
     -   [ ] `[Referans]` `17. THIRD_PARTY_API_CONTRACTS.md`, `18. UI_UX_FLOW_AND_WIREFRAMES.md`
 ````
 
+[ ] `[Frontend/JS]` Kullanıcı bir film kartının üzerine fareyle geldiğinde (`mouseenter`), ilgili filmin fragmanını sessiz ve otomatik oynatan bir `iframe`'i dinamik olarak oluşturan mantığı implemente et.
+    -   [ ] `[Referans]` `17. THIRD_PARTY_API_CONTRACTS.md`, `18. UI_UX_FLOW_AND_WIREFRAMES.md`
+
 # TODO - Faz 3: Kişiselleştirme ve Oyunlaştırma
 
 Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 3**'ü hayata geçirmek için gereken tüm teknik görevleri detaylı ve sıralı bir şekilde listeler.
