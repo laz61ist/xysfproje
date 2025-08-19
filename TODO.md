@@ -237,3 +237,68 @@ Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 4**'ü hayata geçirmek i
     -   [ ] `[DB]` `forums`, `threads`, ve `posts` tablolarını oluştur.
     -   [ ] `[Backend/Frontend]` Kullanıcıların forumları listeleyebileceği, yeni tartışma başlıkları açabileceği ve başlıklara yanıt yazabileceği temel arayüzü ve mantığı geliştir.
     -   [ ] `[Referans]` `14. COMMUNITY_FEATURES_AND_MODERATION.md`
+
+# TODO - Faz 6: Native Mobil Uygulamalar (iOS & Android)
+
+Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 6**'yı hayata geçirmek için gereken stratejik ve teknik görevleri listeler. Bu faz, Sinefil Radarı deneyimini App Store ve Google Play'de yayınlanacak, yüksek performanslı ve platforma özgü native uygulamalara taşımayı hedefler.
+
+---
+
+## **▶️ Faz 6: Native Mobil Uygulamalar (iOS & Android)**
+*(**Hedef:** Sinefil Radarı'nın web'deki temel ve en sevilen özelliklerini, iOS ve Android kullanıcıları için optimize edilmiş, hızlı ve sezgisel bir mobil deneyim olarak sunmak.)*
+
+### **Milestone 6.1: Ön Hazırlık ve Strateji**
+*(**Amaç:** Mobil geliştirme sürecine başlamadan önce teknoloji, tasarım ve ekip yapısını netleştirmek.)*
+
+-   [ ] **1. Teknoloji Yığınını Sonlandırma**
+    -   [ ] `[Strategy]` **Native (Swift/Kotlin) vs Cross-Platform (React Native/Flutter)** kararını kesinleştir.
+        -   **Native (Swift/Kotlin):** En yüksek performans, en iyi platform entegrasyonu. İki ayrı kod tabanı ve ekip gerektirir.
+        -   **Cross-Platform:** Tek kod tabanı, daha hızlı geliştirme. Performans ve platforma özgü özelliklerde potansiyel kısıtlamalar.
+    -   [ ] `[DevOps]` Seçilen teknolojiye uygun olarak geliştirme ortamlarını (Xcode için macOS, Android Studio) ve bağımlılıkları (CocoaPods, Gradle) kur.
+
+-   [ ] **2. Mobil API Katmanını Güçlendirme**
+    -   [ ] `[Backend/API]` Faz 5'te tasarlanan **OpenAPI (Swagger)** dokümantasyonunu son haline getir. Tüm mobil uygulama özelliklerinin ihtiyaç duyacağı API uç noktalarının (`endpoints`) tanımlı ve test edilebilir olduğundan emin ol.
+    -   [ ] `[Backend/API]` Mobil uygulamalar için daha verimli veri alışverişi sağlamak amacıyla API yanıtlarını optimize et (gereksiz verileri kaldırma, sayfalama - pagination).
+
+-   [ ] **3. Mobil UI/UX Tasarımı**
+    -   [ ] `[Design]` Web sitesindeki kullanıcı akışlarını mobile uyarlayan, dokunmatik ekranlar için optimize edilmiş **wireframe'ler ve prototipler** (Figma, Sketch vb. araçlarla) oluştur.
+    -   [ ] `[Design]` Apple'ın **Human Interface Guidelines** ve Google'ın **Material Design** prensiplerine uygun, platforma özgü tasarım desenlerini (navigation drawers, tab bars, native alert'ler vb.) tanımla.
+    -   [ ] `[Design]` Uygulama ikonunu, açılış ekranını (splash screen) ve App Store/Google Play için gerekli pazarlama görsellerini tasarla.
+
+### **Milestone 6.2: Çekirdek Uygulama Geliştirme (MVP for Mobile)**
+*(**Amaç:** Uygulamanın ilk yayınlanabilir versiyonu için en kritik özellikleri geliştirmek.)*
+
+-   [ ] **1. Proje Yapısı ve Kimlik Doğrulama**
+    -   [ ] `[Mobile/iOS]` Xcode'da yeni bir Swift projesi oluştur. Gerekli ağ (networking) ve JSON işleme kütüphanelerini (örn: Alamofire, SwiftyJSON) entegre et.
+    -   [ ] `[Mobile/Android]` Android Studio'da yeni bir Kotlin projesi oluştur. Gerekli ağ ve JSON işleme kütüphanelerini (örn: Retrofit, Moshi/Gson) entegre et.
+    -   [ ] `[Mobile/Both]` Supabase'in native mobil client kütüphanelerini (eğer mevcutsa) veya tasarlanan RESTful API'yi kullanarak **Kullanıcı Kaydı, Girişi ve Oturum Yönetimini** implemente et. Güvenli token depolama (Keychain/Keystore) kullanılmalı.
+
+-   [ ] **2. Ana Ekranlar ve Gezinme (Navigation)**
+    -   [ ] `[Mobile/Both]` Uygulama için ana gezinme yapısını kur (örn: iOS'ta Tab Bar, Android'de Bottom Navigation Bar).
+    -   [ ] `[Mobile/Both]` **Ana Sayfa:** Popüler filmleri ve dizileri listeleyen ekranı geliştir. Sonsuz kaydırma (infinite scrolling) ile daha fazla içerik yükleme özelliği ekle.
+    -   [ ] `[Mobile/Both]` **Arama Ekranı:** Kullanıcıların film/dizi araması yapmasını ve sonuçları görmesini sağlayan ekranı geliştir.
+    -   [ ] `[Mobile/Both]` **Film/Dizi Detay Ekranı:** API'den gelen tüm verileri (afiş, özet, oyuncular, fragman oynatıcı, yorumlar) gösteren detay ekranını geliştir.
+
+-   [ ] **3. Çekirdek Etkileşimler**
+    -   [ ] `[Mobile/Both]` Film/Dizi Detay ekranından **Puanlama, Yorum Yazma, Favorilere Ekleme ve Listelere Ekleme** işlevlerini, API'ye istek göndererek çalışacak şekilde implemente et.
+    -   [ ] `[Mobile/Both]` **Profil Ekranı:** Kullanıcının temel bilgilerini, listelerini ve son aktivitelerini gösteren sekmeli profil sayfasını geliştir.
+
+### **Milestone 6.3: Gelişmiş Özellikler ve Yayınlama**
+*(**Amaç:** Uygulamayı zenginleştirmek, test etmek ve marketlerde yayınlamak.)*
+
+-   [ ] **1. Kişiselleştirme ve Bildirimler**
+    -   [ ] `[Mobile/Both]` Giriş yapmış kullanıcılar için ana sayfada **"Haftalık Keşif Radarı"** gibi kişiselleştirilmiş bölümleri göster.
+    -   [ ] `[Backend]` Firebase Cloud Messaging (FCM) veya Apple Push Notification Service (APNS) ile entegrasyon kur.
+    -   [ ] `[Mobile/Both]` Kullanıcıya özel bildirimleri (örn: "Takip ettiğiniz bir kullanıcı yeni bir liste oluşturdu") alıp gösterecek altyapıyı (Push Notifications) kur.
+
+-   [ ] **2. Test ve Optimizasyon**
+    -   [ ] `[QA]` Uygulamanın farklı cihaz boyutları ve işletim sistemi versiyonlarında (iOS 16+, Android 10+) doğru çalıştığını test et.
+    -   [ ] `[QA]` API hataları, internet bağlantısı kopması gibi durumlar için hata yönetimi ve kullanıcıya gösterilecek mesajları test et.
+    -   [ ] `[Performance]` Uygulama başlangıç süresini, ağ isteklerini ve bellek kullanımını optimize et.
+
+-   [ ] **3. Yayınlama Süreci (Deployment)**
+    -   [ ] `[Legal]` Uygulama için bir Gizlilik Politikası ve Kullanım Koşulları metni hazırla.
+    -   [ ] `[DevOps]` Apple Developer ve Google Play Console hesaplarını oluştur ve yapılandır.
+    -   [ ] `[DevOps]` Uygulamanın marketlere gönderilecek sürümlerini (build) oluştur, imzala ve tüm gerekli bilgileri (ekran görüntüleri, açıklamalar, ikonlar) yükle.
+    -   [ ] `[DevOps]` Uygulamaları App Store ve Google Play'e inceleme (review) için gönder.
+    -   [ ] `[Marketing]` Uygulamalar onaylandıktan sonra, web sitesinde ve sosyal medyada lansmanı duyur.
