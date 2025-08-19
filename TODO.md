@@ -71,3 +71,78 @@ Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 2**'yi hayata geçirmek i
     -   [ ] `[Frontend/JS]` `mouseenter` olayında, ilgili filmin fragman anahtarını kullanarak sessiz ve otomatik oynayan bir YouTube `iframe`'ini dinamik olarak oluşturan ve film afişinin üzerine yerleştiren; `mouseleave` olayında ise bu `iframe`'i kaldıran mantığı implemente et.
     -   [ ] `[Referans]` `17. THIRD_PARTY_API_CONTRACTS.md`, `18. UI_UX_FLOW_AND_WIREFRAMES.md`
 ````
+# TODO - Faz 4: Monetizasyon ve Operasyonel Mükemmellik
+
+Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 4**'ü hayata geçirmek için gereken tüm teknik görevleri detaylı ve sıralı bir şekilde listeler.
+
+---
+
+## **▶️ Faz 4: Monetizasyon ve Operasyonel Mükemmellik**
+*(**Hedef:** Platformun finansal sürdürülebilirliğini sağlamak, operasyonel kontrolü artırmak ve viral büyümeyi teşvik edecek özellikler eklemek.)*
+
+### **Milestone 4.1: Gelir Modelleri Altyapısı**
+*(**Amaç:** Platform için sürdürülebilir gelir akışlarının teknik temelini kurmak.)*
+
+-   [ ] **1. Yönlendirme Ortaklığı (Affiliate) Sistemini Kur**
+    -   [ ] `[Admin/DB]` `affiliate_partners` (`partner_name`, `base_url`, `affiliate_tag`) adında yeni bir veritabanı tablosu oluştur.
+    -   [ ] `[Admin/Backend]` Admin Panelinde, bu `affiliate_partners` tablosunu yönetmek için bir CRUD (Create, Read, Update, Delete) arayüzü oluştur.
+    -   [ ] `[Backend]` "Nerede İzleyebilirim?" verisini işleyen servisi, `affiliate_partners` tablosundaki bilgilere göre yönlendirme linklerine affiliate etiketini otomatik olarak ekleyecek şekilde güncelle.
+    -   [ ] `[Referans]` `15. MONETIZATION_STRATEGY.md`, `16. ADMIN_DASHBOARD_SPECS.md`
+
+-   [ ] **2. Gönüllü Destekçi Modelini (Supporter Model) Entegre Et**
+    -   [ ] `[Entegrasyon]` "Buy Me a Coffee" veya Stripe üzerinde bir hesap oluştur ve API anahtarlarını al.
+    -   [ ] `[DB]` `users` tablosuna `is_supporter` (boolean, default `false`) sütununu ekle.
+    -   [ ] `[Backend]` Ödeme platformundan gelen webhook (başarılı ödeme bildirimi) isteklerini yakalayacak güvenli bir API ucu (`/api/webhooks/payment`) oluştur. Bu uç nokta, ilgili kullanıcının `is_supporter` statüsünü `true` olarak güncellemeli.
+    -   [ ] `[Frontend]` Sitenin çeşitli yerlerine (header, footer) "Destek Ol" butonunu/linkini ekle.
+    -   [ ] `[Referans]` `15. MONETIZATION_STRATEGY.md`
+
+-   [ ] **3. Stratejik Reklam Alanlarını Yerleştir**
+    -   [ ] `[Admin/Backend]` Admin Panelinde, reklam alanlarını (`header_banner`, `sidebar_ad` vb.) ve bu alanlara eklenecek Google AdSense kodlarını yönetmek için bir arayüz ve veritabanı tablosu oluştur.
+    -   [ ] `[Backend]` View'leri render eden ana mekanizmayı, `!currentUser.is_supporter` kontrolü yapacak şekilde güncelle. Eğer kullanıcı destekçi değilse, veritabanından ilgili reklam kodunu çekip HTML'e yerleştir.
+    -   [ ] `[Frontend]` Reklamların `UI_UX_FLOW_AND_WIREFRAMES.md`'de belirtilen yerlerde, içeriği bozmayacak şekilde göründüğünü doğrula.
+    -   [ ] `[Referans]` `15. MONETIZATION_STRATEGY.md`
+
+### **Milestone 4.2: AI Maliyet Takip Sisteminin Kurulması**
+*(**Amaç:** Yapay zeka kullanımını ve maliyetlerini şeffaf bir şekilde izlemek ve kontrol etmek.)*
+
+-   [ ] **1. Veritabanı ve Yapılandırma**
+    -   [ ] `[DB]` `DATABASE_SCHEMA.md`'de tanımlanan `ai_usage_logs` tablosunu Supabase'de oluştur.
+    -   [ ] `[Backend]` Yapay zeka maliyet oranlarını saklamak için bir `config/ai.php` dosyası oluştur ve değerleri gir.
+    -   [ ] `[Referans]` `5. DATABASE_SCHEMA.md` (v1.1)
+
+-   [ ] **2. Loglama Mekanizmasını Geliştir (Backend)**
+    -   [ ] `[Backend]` `GemmaService.php` sınıfını, her API çağrısından sonra `usageMetadata`'yı işleyip `ai_usage_logs` tablosuna kayıt atacak `logAiUsage` fonksiyonu ile refaktör et.
+    -   [ ] `[Referans]` `7. GEMMA3_INTEGRATION_BLUEPRINT.md` (v1.2)
+
+-   [ ] **3. Maliyet Merkezi Arayüzünü Oluştur (Admin Panel)**
+    -   [ ] `[Admin/Backend]` Admin paneli için `ai_usage_logs` tablosundan veri çeken (toplam maliyet, günlük kullanım vb.) ve raporlama için hazırlayan yeni metodlar oluştur.
+    -   [ ] `[Admin/Frontend]` Admin paneline "AI Maliyet Merkezi" adında yeni bir bölüm ekle.
+    -   [ ] `[Admin/Frontend]` Bu bölümde, backend'den gelen verileri gösteren özet widget'larını, zaman serisi grafiğini ve detaylı log tablosunu geliştir.
+    -   [ ] `[Referans]` `16. ADMIN_DASHBOARD_SPECS.md` (v1.1)
+
+### **Milestone 4.3: Büyüme ve İletişim Araçları**
+*(**Amaç:** Kullanıcılarla çift yönlü iletişimi güçlendirmek ve viral büyümeyi teşvik etmek.)*
+
+-   [ ] **1. Sinefil Karnesi (Cinephile Wrapped) Geliştir**
+    -   [ ] `[Backend]` Belirli bir kullanıcının o yıl içindeki tüm etkileşimlerini analiz edip `PERSONALIZATION_ALGORITHMS.md`'de belirtilen metrikleri hesaplayan bir `WrappedService` veya komut dosyası oluştur.
+    -   [ ] `[AI]` `GemmaService`'e, bu istatistiksel verileri alıp kişiselleştirilmiş ve esprili metinler üretecek yeni bir metod ekle.
+    -   [ ] `[Frontend]` Her yıl sonunda erişilebilir olacak, `/wrapped/{year}` URL'inde çalışan, animasyonlu, görsel olarak zengin ve paylaşılabilir bir sayfa tasarla ve geliştir.
+    -   [ ] `[Referans]` `12. PERSONALIZATION_ALGORITHMS.md`
+
+-   [ ] **2. İletişim Kanallarını Kur**
+    -   [ ] `[DB]` `feedback` ve `announcements` tablolarını oluştur.
+    -   [ ] `[Frontend]` `/feedback` sayfasını ve "İstek & Öneri" formunu oluştur.
+    -   [ ] `[Admin]` Admin Panelinde gelen geri bildirimleri okumak ve yeni duyurular oluşturmak için arayüzler ekle.
+    -   [ ] `[Frontend]` Header'a bildirim zilini (🔔) ve `/whats-new` duyuru sayfasını ekle.
+    -   [ ] `[Referans]` `18. UI_UX_FLOW_AND_WIREFRAMES.md`
+
+-   [ ] **3. Gelişmiş Moderasyon Araçları**
+    -   [ ] `[DB]` `reports` tablosunu oluştur.
+    -   [ ] `[Frontend]` Tüm kullanıcı içeriklerinin (yorum, liste vb.) yanına "Raporla" butonu ve modal formunu ekle.
+    -   [ ] `[Admin]` Admin Panelinde, gelen raporları listeleyen ve hızlı aksiyon almayı sağlayan bir "Rapor Kuyruğu" arayüzü geliştir.
+    -   [ ] `[Referans]` `14. COMMUNITY_FEATURES_AND_MODERATION.md`
+
+-   [ ] **4. Tartışma Kulüpleri (İlk Versiyon)**
+    -   [ ] `[DB]` `forums`, `threads`, ve `posts` tablolarını oluştur.
+    -   [ ] `[Backend/Frontend]` Kullanıcıların forumları listeleyebileceği, yeni tartışma başlıkları açabileceği ve başlıklara yanıt yazabileceği temel arayüzü ve mantığı geliştir.
+    -   [ ] `[Referans]` `14. COMMUNITY_FEATURES_AND_MODERATION.md`
