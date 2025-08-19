@@ -1,3 +1,94 @@
+# TODO - Faz 1: Çekirdek Deneyim ve MVP (Profesyonel İş Akışıyla)
+
+**Document Version:** 2.1
+**Last Updated:** 18.08.2025
+
+Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 1**'i hayata geçirmek için gereken tüm teknik görevleri, **profesyonel Git iş akışını içerecek şekilde** detaylı, sıralı ve birbirine bağımlı bir şekilde listeler.
+
+---
+
+## **Milestone 1.1: Proje Temelleri ve Altyapı**
+*(**Hedef:** Geliştirme ortamını kurmak, projenin iskeletini oluşturmak ve ilk versiyon kontrolünü sağlamak.)*
+
+-   [ ] **1.1.1. Ortam Kurulumu**
+    -   [ ] `[Infra]` Supabase projesini oluştur ve API anahtarlarını (`URL`, `ANON_KEY`, `SERVICE_ROLE_KEY`) güvenli bir yere kaydet.
+    -   [ ] `[DevOps]` Proje için bir GitHub/GitLab deposu (private) oluştur ve yerel Windows geliştirme ortamına klonla.
+    -   [ ] `[DevOps]` Yerel Windows (XAMPP/WAMP) ortamında Apache Virtual Host ayarını yaparak proje için temiz bir URL (`http://sinefil-radari.test` gibi) tanımla.
+
+-   [ ] **1.1.2. Proje Mimarisi**
+    -   [ ] `[Backend]` `ARCHITECTURE_OVERVIEW.md`'de tanımlanan klasör yapısını oluştur (`app/Controllers`, `app/Models`, `app/Views`, `public`, `config` vb.).
+    -   [ ] `[Backend]` Composer'ı başlat (`composer init`) ve `vlucas/phpdotenv` kütüphanesini yükle.
+    -   [ ] `[Backend]` `.gitignore` dosyasına `.env` ve `/vendor/` dizinini ekle.
+    -   [ ] `[Backend]` `.env.example` dosyasını temel değişkenlerle oluştur.
+    -   [ ] `[Backend]` Gelen tüm istekleri yakalayan bir `public/index.php` (Front Controller) dosyası oluştur.
+    -   [ ] `[Backend]` Basit bir `app/Router.php` sınıfı ve `baseUrl()` yardımcı fonksiyonunu oluştur.
+
+-   [ ] **1.1.3. İlk Commit ve Push (Versiyon Kontrolünü Başlatma)**
+    -   [ ] `[Git]` Proje klasöründeki tüm yeni dosyaları `git add .` komutu ile ekle.
+    -   [ ] `[Git]` `git commit -m "Milestone 1.1: Initial project structure and setup complete"` komutu ile ilk anlamlı kaydı oluştur.
+    -   [ ] `[Git]` `git push origin main` komutu ile kodunun ilk yedeğini ve versiyonunu **GitHub/GitLab'e gönder.**
+
+---
+
+## **Milestone 1.2: Veritabanı ve Kullanıcı Sistemi**
+*(**Hedef:** Veri yapısını kurmak ve kullanıcıların sisteme kaydolup giriş yapabilmesini sağlamak.)*
+
+-   [ ] **1.2.1. Veritabanı Şeması (Supabase)**
+    -   [ ] `[DB]` `users`, `movies`, ve `movie_analyses` tablolarını Supabase'de oluştur.
+    -   [ ] `[DB]` `users` tablosu için RLS politikalarını ve `handle_new_user` PostgreSQL trigger'ını oluştur.
+-   [ ] **1.2.2. Kullanıcı Kimlik Doğrulama (Backend & Frontend)**
+    -   [ ] `[Backend]` `AuthController.php` ve `User.php` modelini oluşturarak kayıt/giriş mantığını implemente et.
+    -   [ ] `[Frontend]` Kayıt (`views/auth/register.php`) ve Giriş (`views/auth/login.php`) için temel HTML formlarını oluştur.
+    -   [ ] `[Frontend]` Header'ı, kullanıcının oturum durumuna göre dinamik hale getir.
+-   [ ] **1.2.3. İlerlemeyi Kaydet (Commit & Push Progress)**
+    -   [ ] `[Git]` `git add .`
+    -   [ ] `[Git]` `git commit -m "Milestone 1.2: Implement user authentication and database schema"`
+    -   [ ] `[Git]` `git push origin main` **(Kodunu GitHub'da güvene al.)**
+
+---
+
+## **Milestone 1.3: Harici Servis Entegrasyonları**
+*(**Hedef:** Projemizin TMDB ve Gemma 3 ile konuşabilmesini sağlayan servisleri oluşturmak.)*
+
+-   [ ] **1.3.1. TMDB ve Gemma 3 Servisleri**
+    -   [ ] `[Backend]` `TMDBService.php` sınıfını ve ilgili metodlarını (`getMovieDetails` vb.) oluştur. Film verilerini `movies` tablosuna kaydeden önbellekleme mantığını ekle.
+    -   [ ] `[Backend]` `GemmaService.php` sınıfını ve `analyzeMovieContent` metodunu oluştur. Gelen analizi `movie_analyses` tablosuna kaydeden mantığı ekle.
+-   [ ] **1.3.2. İlerlemeyi Kaydet (Commit & Push Progress)**
+    -   [ ] `[Git]` `git add .`
+    -   [ ] `[Git]` `git commit -m "Milestone 1.3: Integrate TMDB and Gemma 3 services"`
+    -   [ ] `[Git]` `git push origin main` **(Kodunu GitHub'da güvene al.)**
+
+---
+
+## **Milestone 1.4: Çekirdek Özelliklerin Hayata Geçirilmesi**
+*(**Hedef:** Tüm parçaları birleştirerek kullanıcıların göreceği ana sayfaları ve özellikleri oluşturmak.)*
+
+-   [ ] **1.4.1. Ana Sayfa ve Film Detay Sayfası**
+    -   [ ] `[Backend]` `HomeController` ve `MovieController` sınıflarını, servisleri kullanarak veri çekecek ve view'lere gönderecek şekilde tamamla.
+    -   [ ] `[Frontend]` Ana Sayfa ve Film Detay Sayfası'nın HTML/CSS/JS'ini tamamla (Fragman modal'ı dahil).
+-   [ ] **1.4.2. Profil Sayfası (Temel)**
+    -   [ ] `[Backend/Frontend]` Temel profil sayfasını (`ProfileController` ve `show.php` view) oluştur.
+-   [ ] **1.4.3. İlerlemeyi Kaydet (Commit & Push Progress)**
+    -   [ ] `[Git]` `git add .`
+    -   [ ] `[Git]` `git commit -m "Milestone 1.4: Complete core pages and features for MVP"`
+    -   [ ] `[Git]` `git push origin main` **(Kodunu GitHub'da güvene al.)**
+
+---
+
+## **Milestone 1.5: Dağıtım ve Lansman**
+*(**Hedef:** MVP'yi canlıya almak ve operasyonel hale getirmek.)*
+
+-   [ ] **1.5.1. Sunucu Hazırlığı ve Otomatik Dağıtım**
+    -   [ ] `[DevOps]` Canlı Linux sunucusunu hazırla (Nginx/Apache, PHP, SSL vb.).
+    -   [ ] `[DevOps]` `git push production main` komutuyla çalışacak olan otomatik dağıtım (`post-receive` hook) sistemini kur.
+-   [ ] **1.5.2. Son Kontroller ve Canlıya Geçiş**
+    -   [ ] `[DevOps]` Canlı sunucuda, production anahtarlarını içeren `.env` dosyasını oluştur.
+    -   [ ] `[Test]` Geliştirme branch'ini ana branch (`main`) ile birleştir ve son bir kez `git push origin main` ile GitHub'a gönder.
+    -   [ ] `[DevOps]` **`git push production main` komutu ile projeyi ilk kez canlıya gönder.**
+-   [ ] **1.5.3. Lansman Sonrası Test**
+    -   [ ] `[Test]` Canlı site URL'i üzerinden tüm ana kullanıcı akışlarını baştan sona test et.
+    -   [ ] **FAZ 1 TAMAMLANDI - MVP YAYINDA!**
+
 ### **Güncellenmiş TODO - Faz 1: Çekirdek Deneyim ve MVP**
 *(Bu, `warmup.php` betiğini içeren son ve eksiksiz halidir.)*
 
