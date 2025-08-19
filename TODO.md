@@ -162,6 +162,70 @@ Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 2**'yi hayata geçirmek i
     -   [ ] `[Frontend/JS]` `mouseenter` olayında, ilgili filmin fragman anahtarını kullanarak sessiz ve otomatik oynayan bir YouTube `iframe`'ini dinamik olarak oluşturan ve film afişinin üzerine yerleştiren; `mouseleave` olayında ise bu `iframe`'i kaldıran mantığı implemente et.
     -   [ ] `[Referans]` `17. THIRD_PARTY_API_CONTRACTS.md`, `18. UI_UX_FLOW_AND_WIREFRAMES.md`
 ````
+
+# TODO - Faz 3: Kişiselleştirme ve Oyunlaştırma
+
+Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 3**'ü hayata geçirmek için gereken tüm teknik görevleri detaylı ve sıralı bir şekilde listeler.
+
+---
+
+## **▶️ Faz 3: Kişiselleştirme ve Oyunlaştırma**
+*(**Hedef:** Platformu her kullanıcı için benzersiz, "akıllı" ve bağımlılık yaratan bir deneyime dönüştürmek. Kullanıcıların platformda geçirdiği zamanı ödüllendirerek uzun vadeli bağlılıklarını artırmak.)*
+
+### **Milestone 3.1: Oyunlaştırma Sistemi Altyapısı**
+*(**Amaç:** Kullanıcı etkileşimlerini ödüllendirecek puan ve rozet sisteminin temelini atmak.)*
+
+-   [ ] **1. Veritabanı Şemasını Güncelle**
+    -   [ ] `[DB]` `users` tablosuna `cine_points` adında, varsayılan değeri `0` olan bir `integer` sütunu ekle.
+    -   [ ] `[DB]` `DATABASE_SCHEMA.md`'yi referans alarak `badges` (tüm olası rozetlerin tanımı) ve `user_badges` (kullanıcıların kazandığı rozetler) tablolarını oluştur.
+    -   [ ] `[DB]` `badges` tablosuna, `GAMIFICATION_SYSTEM.md`'de listelenen en az 10 başlangıç rozetini (örn: "First Critic", "Curator", "Horror Aficionado") manuel olarak ekle.
+    -   [ ] `[Referans]` `5. DATABASE_SCHEMA.md`, `13. GAMIFICATION_SYSTEM.md`
+
+-   [ ] **2. Oyunlaştırma Servisini Geliştir (Backend)**
+    -   [ ] `[Backend]` `app/Services/GamificationService.php` adında yeni bir servis sınıfı oluştur.
+    -   [ ] `[Backend]` Bu servisin içinde, belirli bir eylem gerçekleştiğinde (örn: "comment_created") kullanıcının toplam puanını ve rozet kazanma durumunu kontrol eden `checkAndAwardBadges($userId, $action)` gibi bir metod oluştur.
+    -   [ ] `[Backend]` `InteractionController` ve `CommentController` gibi mevcut controller'ları, başarılı bir işlemden sonra (örn: yeni yorum eklendiğinde) `GamificationService`'i çağıracak şekilde güncelle.
+    -   [ ] `[Referans]` `13. GAMIFICATION_SYSTEM.md`
+
+### **Milestone 3.2: Kişiselleştirme Motoru (Backend)**
+*(**Amaç:** Kullanıcı verilerini analiz ederek kişisel öneriler üreten "akıllı" sistemleri kurmak.)*
+
+-   [ ] **1. Haftalık Keşif Radarı (Discover Weekly) Cron Job'unu Oluştur**
+    -   [ ] `[Backend]` `app/Commands/GenerateWeeklyRecommendations.php` adında bir komut dosyası oluştur.
+    -   [ ] `[Backend]` Bu komutun, `PERSONALIZATION_ALGORITHMS.md`'de tanımlanan algoritma akışını (kullanıcının zevk profilini çıkarma, aday havuzu oluşturma, daha önce izlediklerini filtreleme) izlemesini sağla.
+    -   [ ] `[Backend]` `GemmaService`'e, `PROMPT_ENGINEERING_GUIDE.md`'deki `generate_weekly_discovery` şablonunu kullanarak kişiselleştirilmiş öneriler üretecek yeni bir metod ekle.
+    -   [ ] `[DB]` Sonuçları saklamak için `weekly_recommendations` (`user_id`, `recommendations_json`, `week_date`) adında bir tablo oluştur.
+    -   [ ] `[DevOps]` Bu komut dosyasını her Pazartesi sabahı çalıştıracak bir cron job'u sunucuya ekle.
+    -   [ ] `[Referans]` `12. PERSONALIZATION_ALGORITHMS.md`, `8. PROMPT_ENGINEERING_GUIDE.md`, `19. DEPLOYMENT_AND_OPERATIONS_PLAN.md`
+
+-   [ ] **2. Moduna Göre Listeler (Mood Mixes) Mantığını Geliştir**
+    -   [ ] `[Backend]` `HomeController` veya yeni bir `PersonalizationController` içinde, giriş yapmış bir kullanıcının Zevk Profili'ni analiz ederek en popüler "Akıllı Etiketlerini" (`smart_tags`) bulan bir mantık geliştir.
+    -   [ ] `[Backend]` Bu etiketlere dayanarak, kullanıcıya özel dinamik film listeleri (örn: "Sana Özel Gerilim Filmleri") oluşturan bir fonksiyon yaz.
+    -   [ ] `[Referans]` `12. PERSONALIZATION_ALGORITHMS.md`
+
+-   [ ] **3. Topluluk Görüşü Özeti (Community Consensus) AI Görevini Oluştur**
+    -   [ ] `[Backend]` `GemmaService`'e, `PROMPT_ENGINEERING_GUIDE.md`'deki `summarize_community_reviews` şablonunu kullanarak bir filme ait yorumları özetleyecek bir metod ekle.
+    -   [ ] `[Backend]` Belirli bir yoruma ulaşan (örn: 20 yorum) filmler için bu özeti otomatik olarak oluşturup `movie_analyses` tablosuna kaydeden bir zamanlanmış görev veya trigger mekanizması kur.
+    -   [ ] `[Referans]` `8. PROMPT_ENGINEERING_GUIDE.md`, `12. PERSONALIZATION_ALGORITHMS.md`
+
+### **Milestone 3.3: Kişiselleştirme ve Oyunlaştırma Arayüzü (Frontend)**
+*(**Amaç:** Geliştirilen akıllı özellikleri ve oyunlaştırma unsurlarını kullanıcıya sunmak.)*
+
+-   [ ] **1. Oyunlaştırma Öğelerini Arayüze Ekle**
+    -   [ ] `[Frontend]` Profil sayfasında (`views/profile/show.php`), kullanıcının toplam Sine-Puanını ve kazandığı tüm rozetleri sergileyen bir bölüm oluştur.
+    -   [ ] `[Frontend]` `/leaderboards` URL'inde çalışacak ve en yüksek puanlı kullanıcıları listeleyecek `views/leaderboard/index.php` sayfasını oluştur.
+    -   [ ] `[Referans]` `13. GAMIFICATION_SYSTEM.md`
+
+-   [ ] **2. Kişiselleştirilmiş Ana Sayfayı Geliştir**
+    -   [ ] `[Frontend]` Ana sayfayı (`views/home.php`), giriş yapmış kullanıcılar için "Haftalık Keşif Radarı" ve "Moduna Göre Listeler" bölümlerini gösterecek şekilde, dinamik bloklar halinde yeniden tasarla.
+    -   [ ] `[Referans]` `12. PERSONALIZATION_ALGORITHMS.md`, `18. UI_UX_FLOW_AND_WIREFRAMES.md`
+
+-   [ ] **3. Gelişmiş Topluluk Özelliklerini Tamamla**
+    -   [ ] `[DB]` `comments` tablosuna `parent_comment_id` sütununu ekle ve `comment_likes` tablosunu oluştur.
+    -   [ ] `[Backend/Frontend]` Yorumlara yanıt verme (iç içe yorumlar) ve yorumları beğenme işlevlerini tam olarak geliştir ve arayüze entegre et.
+    -   [ ] `[Frontend]` Film Detay Sayfasına, `movie_analyses` tablosundan gelen "Topluluk Görüşü Özeti" metnini gösteren bir bölüm ekle.
+    -   [ ] `[Referans]` `14. COMMUNITY_FEATURES_AND_MODERATION.md`
+
 # TODO - Faz 4: Monetizasyon ve Operasyonel Mükemmellik
 
 Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 4**'ü hayata geçirmek için gereken tüm teknik görevleri detaylı ve sıralı bir şekilde listeler.
@@ -237,6 +301,72 @@ Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 4**'ü hayata geçirmek i
     -   [ ] `[DB]` `forums`, `threads`, ve `posts` tablolarını oluştur.
     -   [ ] `[Backend/Frontend]` Kullanıcıların forumları listeleyebileceği, yeni tartışma başlıkları açabileceği ve başlıklara yanıt yazabileceği temel arayüzü ve mantığı geliştir.
     -   [ ] `[Referans]` `14. COMMUNITY_FEATURES_AND_MODERATION.md`
+
+# TODO - Faz 5: Genişleme ve Gelecek Vizyonu
+
+Bu doküman, `PROJECT_ROADMAP.md`'de tanımlanan **Faz 5 ve Sonrası**'nı hayata geçirmek için gereken stratejik ve teknik görevleri listeler. Bu faz, projenin yeni içerik türlerine ve platformlara açılarak pazarındaki etkisini artırmasını hedefler.
+
+---
+
+## **▶️ Faz 5: Genişleme ve Gelecek Vizyonu**
+*(**Hedef:** Platformu, sinema dikeyinde lider bir konuma taşımak, hizmet kapsamını genişletmek ve kullanıcı deneyimini yeni platformlara taşımak.)*
+
+### **Milestone 5.1: Dizi ve TV Şovları Entegrasyonu (Content Expansion)**
+*(**Amaç:** Platformun en çok talep edilen özelliklerinden birini ekleyerek kullanıcı tabanını ve etkileşimi önemli ölçüde artırmak.)*
+
+-   [ ] **1. Veritabanı Mimarisi Değişikliği**
+    -   [ ] `[DB]` `movies` tablosunu daha genel bir yapıya dönüştürmek veya yeni tablolar eklemek için veritabanını yeniden tasarla. Önerilen yapı:
+        -   `tv_shows` (`id`, `tmdb_id`, `title`, `overview`, `poster_path`, vb.)
+        -   `tv_seasons` (`id`, `tv_show_id`, `season_number`, `air_date`, vb.)
+        -   `tv_episodes` (`id`, `season_id`, `episode_number`, `title`, `overview`, vb.)
+    -   [ ] `[DB]` `movie_interactions`, `comments` gibi etkileşim tablolarını, hem filmleri hem de dizileri/sezonları/bölümleri referans alabilecek şekilde (`content_type`, `content_id` sütunları ile) **polimorfik** bir yapıya dönüştür. Bu, büyük bir veritabanı refaktörüdür.
+
+-   [ ] **2. Backend Entegrasyonu**
+    -   [ ] `[Backend]` `TMDBService`'i, diziler (`/tv/{tv_id}`), sezonlar ve bölümler için TMDB API uç noktalarını destekleyecek şekilde genişlet.
+    -   [ ] `[Backend]` Yeni `TVShowController`, `SeasonController` ve `EpisodeController` sınıflarını oluştur.
+    -   [ ] `[Backend]` Mevcut tüm etkileşim servislerini (puanlama, yorumlama, listeleme vb.) yeni polimorfik veritabanı yapısıyla çalışacak şekilde refaktör et.
+
+-   [ ] **3. Frontend Geliştirmesi**
+    -   [ ] `[Frontend]` Dizi detay sayfaları için yeni bir arayüz tasarla (sezon ve bölüm listelerini içerecek şekilde).
+    -   [ ] `[Frontend]` Sezon ve bölüm detay sayfaları için arayüzler oluştur.
+    -   [ ] `[Frontend]` Ana arama fonksiyonunu, sonuçlarda hem filmleri hem de dizileri gösterecek şekilde güncelle.
+    -   [ ] `[Frontend]` Profil ve liste sayfalarını, dizi etkileşimlerini de gösterecek şekilde güncelle.
+
+### **Milestone 5.2: Gelişmiş Sosyal Özellikler (Social Deepening)**
+*(**Amaç:** Kullanıcılar arası etkileşimi artırarak platformu daha "yapışkan" (sticky) hale getirmek.)*
+
+-   [ ] **1. Takip Sistemi**
+    -   [ ] `[DB]` Kullanıcılar arası takip ilişkisini saklamak için bir `followers` (`follower_id`, `following_id`) ara tablosu oluştur.
+    -   [ ] `[Backend]` Kullanıcıların birbirini takip etmesini ve takipten çıkarmasını yönetecek bir `FollowController` oluştur.
+    -   [ ] `[Frontend]` Kullanıcı profillerine "Takip Et" / "Takipten Çık" butonlarını ve takipçi/takip edilen sayılarını ekle.
+
+-   [ ] **2. Kişisel Aktivite Akışı (Activity Feed)**
+    -   [ ] `[DB]` Takip edilen kullanıcıların önemli eylemlerini (yeni bir filme 5 yıldız vermesi, yeni bir liste oluşturması vb.) saklamak için bir `activity_feed_items` tablosu tasarla.
+    -   [ ] `[Backend]` Kullanıcı bir eylem gerçekleştirdiğinde, onu takip edenlerin akışına yeni bir öğe ekleyecek bir `ActivityFeedService` oluştur.
+    -   [ ] `[Frontend]` Giriş yapmış kullanıcılar için, takip ettikleri kişilerin aktivitelerini gösteren, Facebook/X akışına benzer bir `/dashboard` veya `/feed` sayfası oluştur. Bu, giriş sonrası ana sayfa olabilir.
+
+### **Milestone 5.3: Derinlemesine Yapay Zeka Entegrasyonları (AI Advancement)**
+*(**Amaç:** Gemma 3'ün yeteneklerini, başka hiçbir platformda bulunmayan benzersiz ve "sihirli" özellikler sunmak için kullanmak.)*
+
+-   [ ] **1. Film Karşılaştırma Asistanı**
+    -   [ ] `[AI/Backend]` `GemmaService`'e, iki filmin verilerini alıp bu filmleri tematik, sinematografik ve hikaye anlatımı açısından karşılaştıran bir metin üretecek `compareMovies(movieA, movieB)` metodu ekle.
+    -   [ ] `[Frontend]` Kullanıcıların iki film seçip karşılaştırma sonucunu görebileceği yeni bir `/compare` arayüzü oluştur.
+
+-   [ ] **2. Gelişmiş Semantik Arama**
+    -   [ ] `[AI/Backend]` Gemma 3'ün "function calling" veya "tool use" yeteneklerini araştır. Kullanıcının "Se7en gibi karanlık ama başrolü kadın olan bir film" gibi karmaşık, doğal dil sorgularını, sistemin anlayabileceği yapılandırılmış filtrelere (`genre: thriller`, `theme: dark`, `protagonist_gender: female`) dönüştürecek bir sistem tasarla.
+    -   [ ] `[Frontend]` Ana arama çubuğunu veya özel bir "AI Asistanı" sayfasını, bu tür gelişmiş sorguları kabul edecek şekilde güncelle.
+
+### **Milestone 5.4: Mobil Uygulama Altyapısı ve API Geliştirme (Mobile Groundwork)**
+*(**Amaç:** Gelecekteki native mobil uygulamaları desteklemek için projenin mimarisini API odaklı bir yapıya dönüştürmek.)*
+
+-   [ ] **1. Kapsamlı RESTful API Tasarımı**
+    -   [ ] `[API]` Platformun tüm özelliklerini (kimlik doğrulama, film/dizi listeleme, etkileşimler, listeler vb.) dışa açacak bir RESTful API tasarla.
+    -   [ ] `[API]` Tüm API uç noktalarını, istek/yanıt formatlarını ve veri modellerini **OpenAPI 3.0 (Swagger)** formatında belgele. Bu, hem mobil geliştiriciler için bir rehber olacak hem de API'yi test etmeyi kolaylaştıracaktır. *(Referans: Daha önceki hafıza notunuz)*
+-   [ ] **2. Backend Refaktörü (API Odaklı)**
+    -   [ ] `[Backend]` Mevcut Controller'ları, gelen isteğin türüne göre (`Accept` başlığı) ya bir HTML view render edecek ya da saf JSON yanıtı dönecek şekilde refaktör et. Bu, web ve mobil için tek bir kod tabanı kullanılmasını sağlar.
+-   [ ] **3. Mobil Geliştirme Ön Hazırlığı**
+    -   [ ] `[Mobile]` Hedef mobil platformlar için teknoloji yığınını araştır ve seç (React Native, Flutter, veya native Swift/Kotlin).
+    -   [ ] `[Mobile]` Seçilen teknolojiye göre temel bir başlangıç projesi oluştur ve tasarlanan API'nin kimlik doğrulama (`login`) ucuna başarılı bir şekilde bağlanabildiğini test et.
 
 # TODO - Faz 6: Native Mobil Uygulamalar (iOS & Android)
 
